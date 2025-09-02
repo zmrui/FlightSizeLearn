@@ -1,0 +1,117 @@
+From 80c542642f7c2748d9cde7f8a878ce44f91c1cf2 Mon Sep 17 00:00:00 2001
+From: zmrui <zmrui@outlook.com>
+Date: Tue, 2 Sep 2025 15:15:49 -0500
+Subject: [PATCH] patch to support ML-FlightSize
+
+---
+ include/net/tcp.h    | 22 +++++++++++++++---
+ net/ipv4/tcp_input.c | 53 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+), 3 deletions(-)
+
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 2d08473a6dc0..2d970905c411 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -48,6 +48,10 @@
+ #include <linux/bpf-cgroup.h>
+ #include <linux/siphash.h>
+ 
++// ==> ADDED FOR ML PROTOTYPE
++extern unsigned int ml_tcp_get_flight_size(void);
++// <== END ADDED
++
+ extern struct inet_hashinfo tcp_hashinfo;
+ 
+ DECLARE_PER_CPU(unsigned int, tcp_orphan_count);
+@@ -1319,9 +1323,21 @@ static inline unsigned int tcp_left_out(const struct tcp_sock *tp)
+  *	"Packets left network, but not honestly ACKed yet" PLUS
+  *	"Packets fast retransmitted"
+  */
+-static inline unsigned int tcp_packets_in_flight(const struct tcp_sock *tp)
+-{
+-	return tp->packets_out - tcp_left_out(tp) + tp->retrans_out;
++static unsigned int tcp_packets_in_flight(const struct tcp_sock *tp)
++{	
++	unsigned int fs = tp->packets_out - tcp_left_out(tp) + tp->retrans_out;
++	 // ==> ADDED FOR ML PROTOTYPE
++	if (tp->inet_conn.icsk_ca_state == 3){
++    	unsigned int ml_fs = ml_tcp_get_flight_size();
++    	// Return our value if it has been set by userspace, otherwise proceed.
++    	// Using 0 as the "not set" sentinel value.
++		if (ml_fs > 0) {
++			printk("Kfunc: Return FS as %u",ml_fs);
++			return ml_fs;
++		}
++	}
++    // <== END ADDED
++	return fs;
+ }
+ 
+ #define TCP_INFINITE_SSTHRESH	0x7fffffff
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 1b09b4d76c29..0f4934e6cfd0 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -82,6 +82,59 @@
+ #include <net/busy_poll.h>
+ #include <net/mptcp.h>
+ 
++#include <linux/kobject.h>
++#include <linux/sysfs.h>
++// ==> ADDED FOR ML PROTOTYPE
++static unsigned int ml_flight_size;
++static DEFINE_SPINLOCK(fs_lock);
++// <== END ADDED
++
++// ==> ADDED FOR ML PROTOTYPE
++// No EXPORT_SYMBOL needed as this will be linked into the core kernel
++unsigned int ml_tcp_get_flight_size(void)
++{
++    unsigned int temp_fs;
++    spin_lock_bh(&fs_lock);
++    temp_fs = ml_flight_size;
++    spin_unlock_bh(&fs_lock);
++    return temp_fs;
++}
++// <== END ADDED
++// ==> ADDED FOR ML PROTOTYPE
++static ssize_t ml_flight_size_store(struct kobject *kobj, struct kobj_attribute *attr, const char *buf, size_t count) {     
++	unsigned int temp_fs;
++    int ret = kstrtou32(buf, 10, &temp_fs);
++    if (ret < 0) return ret;
++
++    spin_lock_bh(&fs_lock);
++    ml_flight_size = temp_fs;
++    spin_unlock_bh(&fs_lock);
++
++    pr_info("ml_flight_size updated to: %u\n", temp_fs);
++    return count;
++}
++static ssize_t ml_flight_size_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf) {     
++	unsigned int temp_fs;
++    spin_lock_bh(&fs_lock);
++    temp_fs = ml_flight_size;
++    spin_unlock_bh(&fs_lock);
++    return sysfs_emit(buf, "%u\n", temp_fs); 
++}
++static struct kobj_attribute ml_flight_size_attribute = __ATTR(flight_size, 0600, ml_flight_size_show, ml_flight_size_store);
++
++static int __init ml_tcp_sysfs_init(void)
++{
++    struct kobject *ml_tcp_kobj = kobject_create_and_add("ml_tcp", kernel_kobj);
++    if (!ml_tcp_kobj) return -ENOMEM;
++    if (sysfs_create_file(ml_tcp_kobj, &ml_flight_size_attribute.attr)) {
++         kobject_put(ml_tcp_kobj);
++         return -ENOMEM;
++    }
++    return 0;
++}
++subsys_initcall(ml_tcp_sysfs_init); // This registers the init function
++// <== END ADDED
++
+ int sysctl_tcp_max_orphans __read_mostly = NR_FILE;
+ 
+ #define FLAG_DATA		0x01 /* Incoming frame contained data.		*/
+-- 
+2.34.1
+

@@ -1,2 +1,102 @@
 # FlightSize_Learn
-Towards Accurate TCP FlightSize Estimation: A History-Aware Learning Approach in 2025 IEEE International Performance, Computing, and Communications Conference (IPCCC) 
+
+This repository contains the source code and experiment scripts for "Towards Accurate TCP FlightSize Estimation: A History-Aware Learning Approach" (IEEE IPCCC 2025). The project implements a machine learning approach to estimate TCP flight size using kernel modules, user-space ML prediction, and network simulation testbeds.
+
+## Project Overview
+
+The system combines kernel-space TCP monitoring with user-space machine learning to provide accurate TCP flight size estimation. It includes:
+
+- **Kernel Modules**: TCP monitoring and sysfs interface for ML predictions
+- **ML Prediction Engine**: XGBoost-based flight size estimation using tl2cgen
+- **Network Testbeds**: Mininet and Mahimahi-based controlled testing environments
+- **Experiment Automation**: Parameter sweep and batch testing capabilities
+
+## Architecture
+
+### Core Components
+
+- **`kmod_sysfs/`**: Kernel modules for TCP monitoring and ML interface
+- **`C_ml_model/`**: Compiled XGBoost model for real-time prediction
+- **`Mininet_testbed/`**: Network simulation framework
+- **Experiment control scripts**: Automated parameter testing
+
+### Data Flow
+
+1. TCP monitor collects socket information
+2. ML predictor processes data and generates flight size estimates
+3. Sysfs interface provides kernel-userspace communication
+4. Network testbeds create controlled conditions for evaluation
+
+## Installation
+
+### Prerequisites
+
+```bash
+sudo apt install build-essential python3 python3-pip
+pip3 install numpy pandas matplotlib psutil
+```
+
+### Dependencies
+
+- **virtme**: For kernel virtualization
+- **tl2cgen**: For compiled XGBoost inference
+- **Mininet**: Network simulation
+- **Mahimahi**: Network emulation
+
+### Setup
+
+1. **Clone repositories**:
+   ```bash
+   git clone https://github.com/zmrui/FlightSize_Learn
+   git clone --branch v6.14.9 git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+   git clone https://github.com/amluto/virtme.git
+   ```
+
+2. **Build kernel** (branch 6.14.9):
+   ```bash
+   cd linux
+   # Apply patches and use provided .config
+   make
+   ```
+
+3. **Build virtme**:
+   ```bash
+   cd virtme
+   make
+   ```
+
+4. **Build kernel modules**:
+   ```bash
+   cd kmod_sysfs
+   make
+   
+   cd tcp_monitor
+   make
+   ```
+
+## Usage
+
+### Start
+
+```bash
+# Run single experiment
+./boot_kvm_script.sh
+```
+
+
+## Configuration
+
+Control files configure experiment parameters:
+- `cca_control`: Congestion control algorithm
+- `reorder_control`: Packet reordering settings
+- `bw_control`: Bandwidth configuration
+- `rtt_control`: RTT settings
+- `ML_control`: ML prediction parameters
+
+## Important Paths
+
+- Kernel source: `/home/ubuntu/FlightSize/linux`
+- Socket info: `/home/ubuntu/FlightSize/socket_info`
+- ML predictions: `/home/ubuntu/FlightSize/ml_flight_size`
+- Compiled model: `/home/ubuntu/FlightSize/C_ml_model/libxgb.so`
+
