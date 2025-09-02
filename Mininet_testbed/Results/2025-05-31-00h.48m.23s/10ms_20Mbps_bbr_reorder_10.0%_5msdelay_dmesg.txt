@@ -1,2 +1,0 @@
-[   42.273173] h1-eth0 (unregistering): left promiscuous mode
-[   42.452669] h2-eth0 (unregistering): left promiscuous mode
