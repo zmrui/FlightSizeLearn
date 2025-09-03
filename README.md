@@ -22,7 +22,7 @@ The system combines kernel-space TCP monitoring with user-space machine learning
 
 ## Architecture
 
-![](workflow.png)
+![workflow](workflow.png)
 
 ### Core Components
 
