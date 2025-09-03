@@ -22,6 +22,8 @@ The system combines kernel-space TCP monitoring with user-space machine learning
 
 ## Architecture
 
+![](workflow.png)
+
 ### Core Components
 
 - **`kmod_sysfs/`**: Kernel modules for TCP monitoring and ML interface
@@ -31,10 +33,7 @@ The system combines kernel-space TCP monitoring with user-space machine learning
 
 ### Data Flow
 
-1. TCP monitor collects socket information
-2. ML predictor processes data and generates flight size estimates
-3. Sysfs interface provides kernel-userspace communication
-4. Network testbeds create controlled conditions for evaluation
+tobe update
 
 ## Installation
 
