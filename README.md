@@ -102,6 +102,8 @@ Control files configure experiment parameters:
 
 ## Important Paths
 
+Some paths were static to /home/ubuntu/FlightSize, please replace them accordingly.
+
 - Kernel source: `/home/ubuntu/FlightSize/linux`
 - Socket info: `/home/ubuntu/FlightSize/socket_info`
 - ML predictions: `/home/ubuntu/FlightSize/ml_flight_size`
