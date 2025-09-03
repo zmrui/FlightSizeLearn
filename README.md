@@ -84,13 +84,13 @@ python3 collection_mahimahi.py
 ### Modeling training
 
 ```bash
-python3 xgb.py
+python3 xgbtrain.py
 ```
 
 ### Start
 
 ```bash
-python3 C_ml_model/cgb2.py
+python3 C_ml_model/xgb2.py
 # Run experiments
 ./boot_kvm_script.sh
 ```
