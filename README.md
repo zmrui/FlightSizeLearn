@@ -89,7 +89,7 @@ python3 xgbtrain.py
 
 ### ML, ablation study, and feature importance
 
-1.non_sequential_CV.ipynb
+non_sequential_CV.py
 
 ### Start
 
