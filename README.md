@@ -82,6 +82,18 @@ pip3 install numpy pandas matplotlib psutil xgboost scikit-learn
 
 ## Usage
 
+### Data collection
+
+```bash
+python3 collection_mahimahi.py
+```
+
+### Modeling training
+
+```bash
+python3 xgb.py
+```
+
 ### Start
 
 ```bash
