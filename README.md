@@ -42,13 +42,6 @@ sudo apt install build-essential python3 python3-pip
 pip3 install numpy pandas matplotlib psutil xgboost scikit-learn
 ```
 
-### Dependencies
-
-- **virtme**: For kernel virtualization
-- **tl2cgen**: For compiled XGBoost inference
-- **Mininet**: Network simulation
-- **Mahimahi**: Network emulation
-
 ### Setup
 
 1. **Clone repositories**:
