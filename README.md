@@ -2,8 +2,13 @@
 
 # FlightSize_Learn
 
-This repository contains the source code and experiment scripts for "Towards Accurate TCP FlightSize Estimation: A History-Aware Learning Approach" accepted by 2025 IEEE International Performance, Computing, and Communications Conference (IPCCC). 
-The project implements a machine learning approach to estimate TCP FlightSize using kernel modules, user-space ML prediction, and network simulation testbeds.
+This repository contains the source code and experiment scripts for "Towards Accurate TCP FlightSize Estimation: A History-Aware Learning Approach," accepted by the 2025 IEEE International Performance, Computing, and Communications Conference (IPCCC). 
+The work implements a machine learning approach to estimate TCP FlightSize from historical data. 
+
+Integrating predicted FlightSize to the kernel using kernel patch, kernel modules, user-space ML prediction, communicated via sysfs created by the kernel module.
+The new compiled kernel is run in Virtme to prevent potential harm to the host system.
+The Mahimahi and Mininet network emulation testbeds are used for emulation.
+
 
 ## Overview
 
