@@ -15,10 +15,10 @@ The Mahimahi and Mininet network emulation testbeds are used for emulation.
 The system combines kernel-space TCP monitoring with user-space machine learning to provide accurate TCP flight size estimation. It includes:
 
 - **Kernel Patches**: Patches to support replacing FlightSize with the predicted value. 
-- **Kernel Modules**: TCP monitoring and sysfs interface for ML predictions
-- **ML Prediction Engine**: XGBoost-based flight size estimation. The XGBoost is compiled into a C binary program.
-- **Network Testbeds**: Mininet and Mahimahi-based controlled testing environments
-- **Experiment Automation**: Parameter sweep and batch testing capabilities
+- **Kernel Modules**: TCP monitoring and sysfs interface for ML predictions.
+- **ML Prediction Engine**: XGBoost-based flight size estimation modeling.
+- **Network Testbeds**: Mininet and Mahimahi-based controlled testing environments. Mahimahi with trace replay is used for data collection, and Mininet is used for integration testing.
+- **Experiment Automation**: Parameter sweep and batch testing capabilities.
 
 ## Architecture
 
