@@ -46,7 +46,7 @@ pip3 install numpy pandas matplotlib psutil xgboost scikit-learn
 
 1. **Clone repositories**:
    ```bash
-   git clone https://github.com/zmrui/FlightSize_Learn FlightSize
+   git clone https://github.com/zmrui/FlightSizeLearn FlightSize
    cd FlightSize
    git clone --branch v6.14.9 git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
    git clone https://github.com/amluto/virtme.git
