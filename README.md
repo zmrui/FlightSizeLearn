@@ -1,5 +1,3 @@
-# Not finished yet
-
 # FlightSize_Learn
 
 This repository contains the source code and experiment scripts for "Towards Accurate TCP FlightSize Estimation: A History-Aware Learning Approach," accepted by the 2025 IEEE International Performance, Computing, and Communications Conference (IPCCC). 
@@ -87,12 +85,13 @@ pip3 install numpy pandas matplotlib psutil xgboost scikit-learn
 ### Start
 
 ```bash
-# Run single experiment
+python3 C_ml_model/cgb2.py
+# Run experiments
 ./boot_kvm_script.sh
 ```
 
 
-## Configuration
+### Controlling Configurations
 
 Control files configure experiment parameters:
 - `cca_control`: Congestion control algorithm
