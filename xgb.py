@@ -83,3 +83,15 @@ xgb.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
 
 xgb.save_model("xgb_model.json")
 xgb.save_model("xgb_model.bin")
+
+
+import treelite
+tl_model = treelite.frontend.load_xgboost_model("xgb_model.json")
+import tl2cgen           
+tl2cgen.export_lib(
+        tl_model,                # the Treelite model
+        toolchain="gcc",         # "clang" or "msvc" also work
+        libpath="libxgb.so",     # .dll on Windows, .dylib on macOS
+        params={"parallel_comp": 2},  # use your CPU cores
+        verbose=True
+)
