@@ -33,7 +33,7 @@ The system combines kernel-space TCP monitoring with user-space machine learning
 
 ### Data Flow
 
-tobe update
+As in architecture.
 
 ## Installation
 
@@ -41,7 +41,7 @@ tobe update
 
 ```bash
 sudo apt install build-essential python3 python3-pip
-pip3 install numpy pandas matplotlib psutil
+pip3 install numpy pandas matplotlib psutil xgboost scikit-learn
 ```
 
 ### Dependencies
@@ -55,31 +55,31 @@ pip3 install numpy pandas matplotlib psutil
 
 1. **Clone repositories**:
    ```bash
-   git clone https://github.com/zmrui/FlightSize_Learn
+   git clone https://github.com/zmrui/FlightSize_Learn FlightSize
+   cd FlightSize
    git clone --branch v6.14.9 git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
    git clone https://github.com/amluto/virtme.git
    ```
 
 2. **Build kernel** (branch 6.14.9):
    ```bash
+   cp kernel_related/0001-patch-to-support-ML-FlightSize.patch linux/
+   cp kernel_related/.config linux/ 
    cd linux
-   # Apply patches and use provided .config
-   make
+   git apply 0001-patch-to-support-ML-FlightSize.patch
+   make KBUILD_BUILD_TIMESTAMP="" bzImage
+   cd -
    ```
 
-3. **Build virtme**:
-   ```bash
-   cd virtme
-   make
-   ```
 
-4. **Build kernel modules**:
+3. **Build kernel modules**:
    ```bash
    cd kmod_sysfs
    make
    
    cd tcp_monitor
    make
+   cd ../..
    ```
 
 ## Usage
