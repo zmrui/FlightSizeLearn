@@ -111,10 +111,11 @@ Control files configure experiment parameters:
 
 ## Important Paths
 
-Some paths were static to /home/ubuntu/FlightSize, please replace them accordingly.
+Several scripts contain hardcoded paths /home/ubuntu/FlightSize. Please replace them accordingly.
 
 - Kernel source: `/home/ubuntu/FlightSize/linux`
 - Socket info: `/home/ubuntu/FlightSize/socket_info`
 - ML predictions: `/home/ubuntu/FlightSize/ml_flight_size`
 - Compiled model: `/home/ubuntu/FlightSize/C_ml_model/libxgb.so`
+- These paths appear in `utils.py`, `C_ml_model/xgb2.py`, and kernel module makefiles.
 
